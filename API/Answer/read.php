@@ -1,5 +1,5 @@
 <?php
-ob_clean(); // Nettoie le tampon de sortie
+ob_clean();
 header("Access-Control-Allow-Origin: *");
 header("Content-Type: application/json; charset=UTF-8");
 
@@ -8,8 +8,8 @@ include_once '../class/Answers.php';
 
 $database = new Database();
 $db = $database->getConnection();
-$items = new Answers($db);
-$stmt = $items->getAnswer();
+$answers = new Answers($db);
+$stmt = $answers->getAnswer();
 $itemCount = $stmt->rowCount();
 
 if ($itemCount > 0) {
@@ -21,18 +21,13 @@ if ($itemCount > 0) {
         $id_answer = $row['id_answer'];
         $answer = $row['answer'];
         $fk_question = $row['fk_question'];
-        $fk_user = array(
-            "name" => $row['user_name'],
-            "firstname" => $row['user_firstname'],
-            "mail" => $row['user_mail']
-
-        );
+        $mail = $row['mail'];
 
         $e = array(
             "id_answer" => $id_answer,
             "answer" => $answer,
             "fk_question" => $fk_question,
-            "fk_user" => $fk_user
+            "mail" => $mail
         );
 
         array_push($answerArr["body"], $e);
@@ -43,9 +38,4 @@ if ($itemCount > 0) {
     http_response_code(404);
     echo json_encode(array("message" => "Aucun enregistrement trouvé."));
 }
-
-
-
 ?>
-
-

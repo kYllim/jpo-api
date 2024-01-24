@@ -25,7 +25,7 @@ if ($item->id_answer !== null) {
             "id_answer" =>  $item->id_answer,
             "answer" => $item->answer,
             "fk_question" => $item->fk_question,
-            "fk_user" => $item->fk_user
+            "mail" => $item->mail
         );
 
         http_response_code(200);

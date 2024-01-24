@@ -20,6 +20,12 @@ if (empty($data->firstname) || empty($data->name) || empty($data->mail)) {
     exit();
 }
 
+if (!filter_var($data->mail, FILTER_VALIDATE_EMAIL)) {
+    http_response_code(400);
+    echo json_encode(array("message" => "L'adresse e-mail n'est pas valide."));
+    exit();
+}
+
 // Set data
 $item->firstname = $data->firstname;
 $item->name = $data->name;

@@ -60,7 +60,7 @@
         }
 
         // READ single
-        public function getSingleUsers(){
+         public function getSingleUsers(){
             $sqlQuery = "SELECT
                             id_user, 
                             name, 
@@ -81,8 +81,43 @@
             $this->mail = $dataRow['mail'];
             $this->firstname = $dataRow['firstname'];
             $this->id_user = $dataRow['id_user'];
+        } 
+
+        public function getUserByMail($mail) {
+            // Requête SQL pour récupérer l'utilisateur par e-mail
+            $query = "SELECT * FROM " . $this->db_table . " WHERE mail = :mail";
+    
+            // Préparation de la requête
+            $stmt = $this->conn->prepare($query);
+    
+            // Nettoyer les données
+            $this->mail = htmlspecialchars(strip_tags($mail));
+    
+            // Lier les valeurs
+            $stmt->bindParam(':mail', $this->mail);
+    
+            // Exécution de la requête
+            $stmt->execute();
+    
+            // Récupération de la ligne correspondante
+            $row = $stmt->fetch(PDO::FETCH_ASSOC);
+    
+            // Mise à jour des propriétés de l'objet
+            if ($row) {
+                $this->id_user = $row['id_user'];
+                $this->name = $row['name'];
+                $this->firstname = $row['firstname'];
+                $this->mail = $row['mail'];
+                // ... Ajoutez d'autres propriétés si nécessaire
+                return true;
+            }
+    
+            return false; // Aucun utilisateur trouvé
         }
-               
+
+        
+
+        
         // UPDATE
         public function updateUsers(){
             $sqlQuery = "UPDATE
